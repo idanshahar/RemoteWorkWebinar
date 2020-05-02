@@ -13,7 +13,7 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: |
-        docker build . -t idansregistry.azurecr.io/k8sdemo:${{ github.sha }}
+        docker build ./src/azure-vote -t idansregistry.azurecr.io/k8sdemo:${{ github.sha }}
         docker push idansregistry.azurecr.io/k8sdemo:${{ github.sha }}
       
     # Set the target AKS cluster.
