@@ -33,7 +33,7 @@ jobs:
     - uses: Azure/k8s-deploy@v1
       with:
         manifests: |
-          azure-vote-all-in-one-redis.yaml
+          azure-vote-all-in-one-external-redis.yaml
         images: |
            idansregistry.azurecr.io/azure-vote-front:${{ github.sha }}
         imagepullsecrets: |
