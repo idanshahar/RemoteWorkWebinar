@@ -1,35 +1,34 @@
 on: [push]
-
-jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    
+      
     - uses: Azure/docker-login@v1
       with:
         login-server: idansregistry.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-    
+        
     - run: |
         docker build ./src/azure-vote -t idansregistry.azurecr.io/azure-vote-front:${{ github.sha }}
         docker push idansregistry.azurecr.io/azure-vote-front:${{ github.sha }}
-      
-    # Set the target AKS cluster.
+        
+      # Set the target AKS cluster.
     - uses: Azure/aks-set-context@v1
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: devconfaks
         resource-group: DevConf
-        
+       
+       
     - uses: Azure/k8s-create-secret@v1
       with:
         container-registry-url: idansregistry.azurecr.io
         container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         secret-name: demo-k8s-secret
-
+        
     - uses: Azure/k8s-deploy@v1
       with:
         manifests: |
